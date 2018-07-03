@@ -79,6 +79,29 @@ const getParkingById = (id) => {
     return result;
 }
 
+const handleMessages = (message) => {
+    const chat_id = message.chat.id;
+    const messsage = message.text;
+
+
+    if (message.entities) {
+        if (message.entities.type == 'bot_command') {
+            const term = messsage.substr(original.indexOf(" ") + 1);
+            logger.info('Search Term', { term: term });
+
+            sendMessage(chat_id, `You searched for: ${term}`);
+        }
+    }
+    else {
+
+        const message_id = message.message_id;
+        logger.info('message_id', { message_id: message_id });
+    
+        sendMessage(chat_id, `Received your text: ${messsage}`);
+    }
+
+}
+
 // webhook for telegram
 app.post(webhookURL, (req, res) => {
     // logger.info('POST params', req.body);
@@ -86,13 +109,16 @@ app.post(webhookURL, (req, res) => {
 
 
     if(req.body.message) {
-        const chat_id = req.body.message.chat.id;
-        const messsage = req.body.message.text;
-        const message_id = req.body.message.message_id;
+
+        handleMessages(req.body.message);
+
+        // const chat_id = req.body.message.chat.id;
+        // const messsage = req.body.message.text;
+        // const message_id = req.body.message.message_id;
     
-        logger.info('message_id', { message_id: message_id });
+        // logger.info('message_id', { message_id: message_id });
     
-        sendMessage(chat_id, `Received your text: ${messsage}`);
+        // sendMessage(chat_id, `Received your text: ${messsage}`);
     }
 
     else if(req.body.callback_query) {

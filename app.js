@@ -57,32 +57,40 @@ let parkingData = [
 
 
 
+const sendMessage = (chat_id, message) => {
+    axios.post(`${TELEGRAM_BOT_URL}/sendMessage`, {
+        chat_id: chat_id,
+        'text': `Received your text: ${messsage}`
+    })
+        .then((res) => {
+            logger.info('Message sent', {
+                message: messsage,
+            });            
+        });
+};
+
 
 // webhook for telegram
 app.post(webhookURL, (req, res) => {
     // logger.info('POST params', req.body);
     logger.info('Body', req.body);
 
-    
-    if(req.body.message.chat.id) {
+
+    if(req.body.message) {
         const chat_id = req.body.message.chat.id;
         const messsage = req.body.message.text;
         const message_id = req.body.message.message_id;
     
         logger.info('message_id', { message_id: message_id });
     
-        axios.post(`${TELEGRAM_BOT_URL}/sendMessage`, {
-            chat_id: chat_id,
-            'text': `Received your text: ${messsage}`
-        })
-            .then((res) => {
-                // console.log(res.data);
-                logger.info('Message sent', {
-                    message: messsage,
-                })
-    
-                // res.send(res.data);
-            });
+        sendMessage(chat_id, `Received your text: ${messsage}`);
+    }
+
+    else if(req.body.callback_query) {
+        const chat_id = callback_query.message.chat.id;
+        const id = req.body.callback_query.data;
+
+        sendMessage(chat_id, id);
     }
 
 
@@ -103,8 +111,10 @@ app.get('/', (req, res) => {
     const inlineKeyboardMakeup = {
         inline_keyboard: [
             [
-                { text: "Parking", callback_data: 11 },
-                { text: "Bus Timings", callback_data: 12 }
+                { text: "Suntec City", callback_data: 1 },
+            ],
+            [
+                { text: "Marina Square", callback_data: 2 }
             ]
         ],
     }

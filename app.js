@@ -58,13 +58,15 @@ let parkingData = [
 
 
 const sendMessage = (chat_id, message) => {
+    const msg = message;
+
     axios.post(`${TELEGRAM_BOT_URL}/sendMessage`, {
         chat_id: chat_id,
-        'text': `Received your text: ${messsage}`
+        text: msg
     })
         .then((res) => {
             logger.info('Message sent', {
-                message: messsage,
+                message: msg,
             });            
         });
 };
@@ -100,33 +102,34 @@ app.post(webhookURL, (req, res) => {
 
 
 app.get('/', (req, res) => {
+
     
-    const replyKeyboardMakeup = {
-        keyboard: [
-            [ "Top Left", "Top Right" ],
-            [ "Bottom Left", "Bottom Right" ]
-        ],
-    }
+    // const replyKeyboardMakeup = {
+    //     keyboard: [
+    //         [ "Top Left", "Top Right" ],
+    //         [ "Bottom Left", "Bottom Right" ]
+    //     ],
+    // }
 
-    const inlineKeyboardMakeup = {
-        inline_keyboard: [
-            [
-                { text: "Suntec City", callback_data: 1 },
-            ],
-            [
-                { text: "Marina Square", callback_data: 2 }
-            ]
-        ],
-    }
+    // const inlineKeyboardMakeup = {
+    //     inline_keyboard: [
+    //         [
+    //             { text: "Suntec City", callback_data: 1 },
+    //         ],
+    //         [
+    //             { text: "Marina Square", callback_data: 2 }
+    //         ]
+    //     ],
+    // }
 
-    axios.post(`${TELEGRAM_BOT_URL}/sendMessage`, {
-        chat_id: 333995996,
-        text: 'working with you',
-        reply_markup: inlineKeyboardMakeup
-    })
-        .then((res) => {
-            console.log(res.data);
-        });
+    // axios.post(`${TELEGRAM_BOT_URL}/sendMessage`, {
+    //     chat_id: 333995996,
+    //     text: 'working with you',
+    //     reply_markup: inlineKeyboardMakeup
+    // })
+    //     .then((res) => {
+    //         console.log(res.data);
+    //     });
 
     res.send('Welcome to SG Travels API.');
 });

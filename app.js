@@ -71,6 +71,14 @@ const sendMessage = (chat_id, message) => {
         });
 };
 
+const getParkingById = (id) => {
+    const result = _.filter(parkingData, (location) => {
+        return id.toLocaleLowerCase() == location.CarParkID.toLocaleLowerCase();
+    });
+
+    return result;
+}
+
 
 // webhook for telegram
 app.post(webhookURL, (req, res) => {
@@ -89,7 +97,7 @@ app.post(webhookURL, (req, res) => {
     }
 
     else if(req.body.callback_query) {
-        const chat_id = callback_query.message.chat.id;
+        const chat_id = req.body.callback_query.message.chat.id;
         const id = req.body.callback_query.data;
 
         sendMessage(chat_id, id);
@@ -104,32 +112,32 @@ app.post(webhookURL, (req, res) => {
 app.get('/', (req, res) => {
 
     
-    // const replyKeyboardMakeup = {
-    //     keyboard: [
-    //         [ "Top Left", "Top Right" ],
-    //         [ "Bottom Left", "Bottom Right" ]
-    //     ],
-    // }
+    const replyKeyboardMakeup = {
+        keyboard: [
+            [ "Top Left", "Top Right" ],
+            [ "Bottom Left", "Bottom Right" ]
+        ],
+    }
 
-    // const inlineKeyboardMakeup = {
-    //     inline_keyboard: [
-    //         [
-    //             { text: "Suntec City", callback_data: 1 },
-    //         ],
-    //         [
-    //             { text: "Marina Square", callback_data: 2 }
-    //         ]
-    //     ],
-    // }
+    const inlineKeyboardMakeup = {
+        inline_keyboard: [
+            [
+                { text: "Suntec City", callback_data: 1 },
+            ],
+            [
+                { text: "Marina Square", callback_data: 2 }
+            ]
+        ],
+    }
 
-    // axios.post(`${TELEGRAM_BOT_URL}/sendMessage`, {
-    //     chat_id: 333995996,
-    //     text: 'working with you',
-    //     reply_markup: inlineKeyboardMakeup
-    // })
-    //     .then((res) => {
-    //         console.log(res.data);
-    //     });
+    axios.post(`${TELEGRAM_BOT_URL}/sendMessage`, {
+        chat_id: 333995996,
+        text: 'working with you',
+        reply_markup: inlineKeyboardMakeup
+    })
+        .then((res) => {
+            console.log(res.data);
+        });
 
     res.send('Welcome to SG Travels API.');
 });

@@ -73,12 +73,11 @@ const sendMessage = (chat_id, message) => {
 
 const getParkingById = (id) => {
     const result = _.filter(parkingData, (location) => {
-        return id.toLocaleLowerCase() == location.CarParkID.toLocaleLowerCase();
+        return id == location.CarParkID;
     });
 
     return result;
 }
-
 
 // webhook for telegram
 app.post(webhookURL, (req, res) => {
@@ -100,7 +99,10 @@ app.post(webhookURL, (req, res) => {
         const chat_id = req.body.callback_query.message.chat.id;
         const id = req.body.callback_query.data;
 
-        sendMessage(chat_id, id);
+        const carpark = getParkingById(1)[0];
+        const carparkReply = `Carpark: ${carpark.Development}\nAvailable lots: ${carpark.AvailableLots}`;
+
+        sendMessage(chat_id, carparkReply);
     }
 
 
@@ -111,74 +113,93 @@ app.post(webhookURL, (req, res) => {
 
 app.get('/', (req, res) => {
 
+    // const replyKeyboardMakeup = {
+    //     keyboard: [
+    //         [ "Top Left", "Top Right" ],
+    //         [ "Bottom Left", "Bottom Right" ]
+    //     ],
+    // }
+
+    // const inlineKeyboardMakeup = {
+    //     inline_keyboard: [
+    //         [
+    //             { text: "Suntec City", callback_data: 1 },
+    //         ],
+    //         [
+    //             { text: "Marina Square", callback_data: 2 }
+    //         ]
+    //     ],
+    // }
+
+    // axios.post(`${TELEGRAM_BOT_URL}/sendMessage`, {
+    //     chat_id: 333995996,
+    //     text: 'working with you',
+    //     reply_markup: inlineKeyboardMakeup
+    // })
+    //     .then((res) => {
+    //         console.log(res.data);
+    //     });
+
+    // res.send('Welcome to SG Travels API.');
+
+
+
+
+
+    // const carpark = getParkingById(1)[0];
+    // const carparkReply = `Carpark: ${carpark.Development}\nAvailable lots: ${carpark.AvailableLots}`;
+
+    // res.send(carparkReply);
+
+    // axios.post(`${TELEGRAM_BOT_URL}/sendMessage`, {
+    //     chat_id: 333995996,
+    //     text: carparkReply,
+    // })
+    //     .then((res) => {
+    //         console.log(res.data);
+    //     });
+
+
+
+});
+
+
+// app.get('/parking', (req, res) => {
+//     axios.get(API_URL, AXIOS_HEADERS)
+//         .then(response => {
+//             // console.log(response.data.value[0]);
+//             parkingData = response.data.value;
+//             res.send('Parking Data updated!');
+//         }
+//     );
+// });
+
+
+// // Search for parking location
+// app.get('/parking/:location', (req, res) => {
+//     const searchLocation = req.params.location.toLowerCase();
     
-    const replyKeyboardMakeup = {
-        keyboard: [
-            [ "Top Left", "Top Right" ],
-            [ "Bottom Left", "Bottom Right" ]
-        ],
-    }
+//     const result = _.filter(parkingData, (location) => {
+//         const currentLocation = location.Development.toLowerCase();
 
-    const inlineKeyboardMakeup = {
-        inline_keyboard: [
-            [
-                { text: "Suntec City", callback_data: 1 },
-            ],
-            [
-                { text: "Marina Square", callback_data: 2 }
-            ]
-        ],
-    }
+//         if (_.includes(currentLocation, searchLocation)) {
+//             return location;
+//         }
+//     });
 
-    axios.post(`${TELEGRAM_BOT_URL}/sendMessage`, {
-        chat_id: 333995996,
-        text: 'working with you',
-        reply_markup: inlineKeyboardMakeup
-    })
-        .then((res) => {
-            console.log(res.data);
-        });
+//     res.send(result);
+// });
 
-    res.send('Welcome to SG Travels API.');
-});
+// // Get parking by id
+// app.get('/parking/id/:id', (req, res) => {
+//     const id = req.params.id.toLowerCase();
 
+//     const result = _.filter(parkingData, (location) => {
+//         return id == location.CarParkID.toLocaleLowerCase();
+//     });
 
-app.get('/parking', (req, res) => {
-    axios.get(API_URL, AXIOS_HEADERS)
-        .then(response => {
-            // console.log(response.data.value[0]);
-            parkingData = response.data.value;
-            res.send('Parking Data updated!');
-        }
-    );
-});
-
-
-// Search for parking location
-app.get('/parking/:location', (req, res) => {
-    const searchLocation = req.params.location.toLowerCase();
-    
-    const result = _.filter(parkingData, (location) => {
-        const currentLocation = location.Development.toLowerCase();
-
-        if (_.includes(currentLocation, searchLocation)) {
-            return location;
-        }
-    });
-
-    res.send(result);
-});
-
-// Get parking by id
-app.get('/parking/id/:id', (req, res) => {
-    const id = req.params.id.toLowerCase();
-
-    const result = _.filter(parkingData, (location) => {
-        return id == location.CarParkID.toLocaleLowerCase();
-    });
-
-    res.send(result);
-});
+//     res.send(result);
+// });
 
 
 app.listen(PORT, () => console.log(`Listening on port ${PORT}...`));

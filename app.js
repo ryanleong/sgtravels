@@ -59,36 +59,29 @@ global.PARKING_DATA = [
     }
 ]
 
-
 // webhook for telegram
 app.post(webhookURL, (req, res) => {
-    // logger.info('POST params', req.body);
     logger.info('Body', req.body);
 
-
     if(req.body.message) {
+        // If Bot Command
         if (req.body.message.entities) {
             messageHandler.handleBotCommand(req.body.message);
         }
+
+        // If standard message
         else {
             messageHandler.handleMessage(req.body.message);
         }
     }
 
+    // If callback query from inline keyboard
     else if(req.body.callback_query) {
         messageHandler.handleCallbackQuery(req.body.callback_query);
     }
-
-
     
     res.send('SG Travels Bot');    
 });
 
 
-app.get('/', (req, res) => {
-    res.send('Welcome to SG Travels API.');
-});
-
-
 app.listen(PORT, () => console.log(`Listening on port ${PORT}...`));
-

@@ -47,7 +47,8 @@ let parkingData = [
 
 // webhook for telegram
 app.post(webhookURL, (req, res) => {
-    res.send('SG Travels Bot');
+    console.log(res);
+    // res.send('SG Travels Bot');
 });
 
 

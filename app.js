@@ -61,26 +61,31 @@ let parkingData = [
 // webhook for telegram
 app.post(webhookURL, (req, res) => {
     // logger.info('POST params', req.body);
-
-    const chat_id = req.body.message.chat.id;
-    const messsage = req.body.message.text;
-    const message_id = req.body.message.message_id;
-
-    logger.info('message_id', { message_id: message_id });
     logger.info('Body', req.body);
 
-    axios.post(`${TELEGRAM_BOT_URL}/sendMessage`, {
-        chat_id: chat_id,
-        'text': `Received your text: ${messsage}`
-    })
-        .then((res) => {
-            // console.log(res.data);
-            logger.info('Message sent', {
-                message: messsage,
-            })
+    
+    if(req.body.message.chat.id) {
+        const chat_id = req.body.message.chat.id;
+        const messsage = req.body.message.text;
+        const message_id = req.body.message.message_id;
+    
+        logger.info('message_id', { message_id: message_id });
+    
+        axios.post(`${TELEGRAM_BOT_URL}/sendMessage`, {
+            chat_id: chat_id,
+            'text': `Received your text: ${messsage}`
+        })
+            .then((res) => {
+                // console.log(res.data);
+                logger.info('Message sent', {
+                    message: messsage,
+                })
+    
+                // res.send(res.data);
+            });
+    }
 
-            // res.send(res.data);
-        });
+
     
     res.send('SG Travels Bot');    
 });
@@ -88,30 +93,30 @@ app.post(webhookURL, (req, res) => {
 
 app.get('/', (req, res) => {
     
-    // const replyKeyboardMakeup = {
-    //     keyboard: [
-    //         [ "Top Left", "Top Right" ],
-    //         [ "Bottom Left", "Bottom Right" ]
-    //     ],
-    // }
+    const replyKeyboardMakeup = {
+        keyboard: [
+            [ "Top Left", "Top Right" ],
+            [ "Bottom Left", "Bottom Right" ]
+        ],
+    }
 
-    // const inlineKeyboardMakeup = {
-    //     inline_keyboard: [
-    //         [
-    //             { text: "Parking", callback_data: 11 },
-    //             { text: "Bus Timings", callback_data: 12 }
-    //         ]
-    //     ],
-    // }
+    const inlineKeyboardMakeup = {
+        inline_keyboard: [
+            [
+                { text: "Parking", callback_data: 11 },
+                { text: "Bus Timings", callback_data: 12 }
+            ]
+        ],
+    }
 
-    // axios.post(`${TELEGRAM_BOT_URL}/sendMessage`, {
-    //     chat_id: 333995996,
-    //     text: 'working with you',
-    //     reply_markup: inlineKeyboardMakeup
-    // })
-    //     .then((res) => {
-    //         console.log(res.data);
-    //     });
+    axios.post(`${TELEGRAM_BOT_URL}/sendMessage`, {
+        chat_id: 333995996,
+        text: 'working with you',
+        reply_markup: inlineKeyboardMakeup
+    })
+        .then((res) => {
+            console.log(res.data);
+        });
 
     res.send('Welcome to SG Travels API.');
 });

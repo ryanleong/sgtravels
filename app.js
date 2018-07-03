@@ -38,7 +38,7 @@ let parkingData = [
     {
         CarParkID: '2',
         Area: 'Marina',
-        Development: 'Suntec',
+        Development: 'Marina Square',
         Location: '1.29115 103.85728',
         AvailableLots: 1038,
         LotType: 'C',
@@ -135,7 +135,6 @@ const handleMessages = (message) => {
 
 }
 
-
 // webhook for telegram
 app.post(webhookURL, (req, res) => {
     // logger.info('POST params', req.body);
@@ -150,7 +149,7 @@ app.post(webhookURL, (req, res) => {
         const chat_id = req.body.callback_query.message.chat.id;
         const id = req.body.callback_query.data;
 
-        const carpark = getParkingById(1)[0];
+        const carpark = getParkingById(id)[0];
         const carparkReply = `Carpark: ${carpark.Development}\nAvailable lots: ${carpark.AvailableLots}`;
 
         // sendMessage(chat_id, carparkReply);
@@ -217,44 +216,6 @@ app.get('/', (req, res) => {
 
 
 });
-
-
-// app.get('/parking', (req, res) => {
-//     axios.get(API_URL, AXIOS_HEADERS)
-//         .then(response => {
-//             // console.log(response.data.value[0]);
-//             parkingData = response.data.value;
-//             res.send('Parking Data updated!');
-//         }
-//     );
-// });
-
-
-// // Search for parking location
-// app.get('/parking/:location', (req, res) => {
-//     const searchLocation = req.params.location.toLowerCase();
-    
-//     const result = _.filter(parkingData, (location) => {
-//         const currentLocation = location.Development.toLowerCase();
-
-//         if (_.includes(currentLocation, searchLocation)) {
-//             return location;
-//         }
-//     });
-
-//     res.send(result);
-// });
-
-// // Get parking by id
-// app.get('/parking/id/:id', (req, res) => {
-//     const id = req.params.id.toLowerCase();
-
-//     const result = _.filter(parkingData, (location) => {
-//         return id == location.CarParkID.toLocaleLowerCase();
-//     });
-
-//     res.send(result);
-// });
 
 
 app.listen(PORT, () => console.log(`Listening on port ${PORT}...`));

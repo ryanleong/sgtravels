@@ -22,7 +22,7 @@ Commands:
 /help - Brings up this menu
         `;
 
-        telegramHandler.send({
+        this.telegramHandler.send({
             chat_id: chat_id,
             text: helpText
         });
@@ -43,7 +43,7 @@ Commands:
         const carparkResultList = this.carparkHandler.search(term);
         const keyboard = this.telegramHandler.generateInlineKeyboard(carparkResultList);
 
-        telegramHandler.send({
+        this.telegramHandler.send({
             chat_id: chat_id,
             text: 'Select one of the options.',
             reply_markup: keyboard
@@ -78,7 +78,7 @@ Commands:
 
         // logger.info('message_id', { message_id: message_id });
     
-        // telegramHandler.send({
+        // this.telegramHandler.send({
         //     chat_id: chat_id,
         //     text: `Received your text: ${message.text}`
         // });
@@ -91,7 +91,7 @@ Commands:
         const carpark = this.carparkHandler.getById(id)[0];
         const carparkReply = `Carpark: ${carpark.Development}\nAvailable lots: ${carpark.AvailableLots}`;
 
-        telegramHandler.send({
+        this.telegramHandler.send({
             chat_id: chat_id,
             text: carparkReply
         });

@@ -3,7 +3,7 @@ const express = require('express');
 const _ = require('lodash');
 
 const app = express();
-const PORT = process.env.PORT;
+const PORT = process.env.PORT || 3000;
 
 const API_URL = 'http://datamall2.mytransport.sg/ltaodataservice/CarParkAvailabilityv2';
 const AXIOS_HEADERS = {
@@ -12,6 +12,8 @@ const AXIOS_HEADERS = {
         accept: 'application/json'
     }
 };
+
+const webhookURL = '/iZYiHHTeAFku7DxAUSsiZ';
 
 let parkingData = [
     {
@@ -43,9 +45,16 @@ let parkingData = [
     }
 ]
 
+// webhook for telegram
+app.post(webhookURL, (req, res) => {
+    res.send('SG Travels Bot');
+});
+
+
 app.get('/', (req, res) => {
     res.send('Welcome to SG Travels API.');
 });
+
 
 app.get('/parking', (req, res) => {
     axios.get(API_URL, AXIOS_HEADERS)
@@ -85,5 +94,5 @@ app.get('/parking/id/:id', (req, res) => {
 });
 
 
-app.listen(PORT, () => console.log('Listening on port 3000!'));
+app.listen(PORT, () => console.log(`Listening on port ${PORT}...`));
 

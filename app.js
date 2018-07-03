@@ -61,23 +61,39 @@ let parkingData = [
 // webhook for telegram
 app.post(webhookURL, (req, res) => {
     // logger.info('POST params', req.body);
-    // res.send('SG Travels Bot');
 
     const chat_id = req.body.message.chat.id;
     const messsage = req.body.message.text;
+    const message_id = req.body.message.message_id;
 
-    axios.post(`${TELEGRAM_BOT_URL}/sendMessage`, {
-        chat_id: chat_id,
-        'text': `Received your text: ${messsage}`
-    })
-        .then((res) => {
-            // console.log(res.data);
-        });
+    logger.info('message_id', { message_id: message_id });
+    logger.info('Body', req.body);
 
+    // axios.post(`${TELEGRAM_BOT_URL}/sendMessage`, {
+    //     chat_id: chat_id,
+    //     'text': `Received your text: ${messsage}`
+    // })
+    //     .then((res) => {
+    //         // console.log(res.data);
+    //         logger.info('Message sent', {
+    //             message: messsage,
+    //         })
+
+    //         // res.send(res.data);
+    //     });
+    
+    res.send('SG Travels Bot');    
 });
 
 
 app.get('/', (req, res) => {
+    // axios.post(`${TELEGRAM_BOT_URL}/sendMessage`, {
+    //     chat_id: 333995996,
+    //     'text': 'working with you'
+    // })
+    //     .then((res) => {
+    //         console.log(res.data);
+    //     });
 
     res.send('Welcome to SG Travels API.');
 });

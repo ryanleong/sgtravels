@@ -1,11 +1,18 @@
 const axios = require('axios');
 const express = require('express');
+const bodyParser = require('body-parser');
 const _ = require('lodash');
 const logger = require('heroku-logger');
 
-const app = express();
+// ExpressJS
 const PORT = process.env.PORT || 3000;
+const webhookURL = '/iZYiHHTeAFku7DxAUSsiZ';
+const app = express();
 
+app.use(bodyParser.json()); // support json encoded bodies
+app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
+
+// AXIO 
 const API_URL = 'http://datamall2.mytransport.sg/ltaodataservice/CarParkAvailabilityv2';
 const AXIOS_HEADERS = {
     headers: {
@@ -14,9 +21,10 @@ const AXIOS_HEADERS = {
     }
 };
 
-const webhookURL = '/iZYiHHTeAFku7DxAUSsiZ';
+// Telegram
 const TELEGRAM_BOT_URL = 'https://api.telegram.org/bot551711816:AAEju_7ufObPEdr8P0vvM4FCIWmD1YW-Smo';
 
+// Sample data
 let parkingData = [
     {
         CarParkID: '1',
@@ -47,15 +55,17 @@ let parkingData = [
     }
 ]
 
+
+
+
 // webhook for telegram
 app.post(webhookURL, (req, res) => {
-    logger.info(res);
+    logger.info('POST params', req.body);
     res.send('SG Travels Bot');
 });
 
 
 app.get('/', (req, res) => {
-    logger.info(res);
     res.send('Welcome to SG Travels API.');
 });
 

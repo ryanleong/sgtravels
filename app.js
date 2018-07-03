@@ -75,10 +75,10 @@ app.get('/parking/:location', (req, res) => {
 
 // Get parking by id
 app.get('/parking/id/:id', (req, res) => {
-    const id = req.params.id;
+    const id = req.params.id.toLowerCase();
 
     const result = _.filter(parkingData, (location) => {
-        return id == location.CarParkID;
+        return id == location.CarParkID.toLocaleLowerCase();
     });
 
     res.send(result);

@@ -1,6 +1,7 @@
 const logger = require('heroku-logger');
 
 const Carparks = require('./Carparks');
+const Bus = require('./Bus');
 const Telegram = require('./Telegram');
 
 const TELEGRAM_BOT_URL = 'https://api.telegram.org/bot551711816:AAEju_7ufObPEdr8P0vvM4FCIWmD1YW-Smo';
@@ -10,6 +11,7 @@ class Messages {
     constructor() {
         this.carparkHandler = new Carparks();
         this.telegramHandler = new Telegram();
+        this.busHandler = new Bus();
     }
 
     commandHelp(chat_id) {
@@ -50,6 +52,36 @@ Commands:
         });
     }
 
+    commandBus(message) {
+        const chat_id = message.chat.id;
+        const stopId = message.text.substr(message.text.indexOf(" ") + 1);
+
+        // Check if search has no term
+        if (message.text.split(" ").length == 1) {
+            this.commandHelp(chat_id);
+            return;
+        }
+
+        this.busHandler.getArrivalTimings(stopId, (data) => {
+
+            if (data.Services) {
+
+                const messageStr = this.telegramHandler.generateBusReturnText(data.Services);
+
+                this.telegramHandler.send({
+                    chat_id: chat_id,
+                    text: messageStr,
+                });
+            }
+            else {
+                this.telegramHandler.send({
+                    chat_id: chat_id,
+                    text: 'There are no buses running.',
+                });
+            }
+        });
+    }
+
     handleBotCommand(message) {
         const messageText = message.text;
 
@@ -58,13 +90,17 @@ Commands:
             const command = messageText.split(" ")[0];
 
             switch(command) {
-                case '/start':
-                case '/help':
-                    this.commandHelp(message.chat.id);
-                    break;
-
+                
                 case '/carpark':
                     this.commandCarpark(message);
+                    break;
+                
+                case '/bus':
+                    this.commandBus(message);
+                    break;
+                    
+                default:
+                    this.commandHelp(message.chat.id);
                     break;
             }
         }

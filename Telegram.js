@@ -28,6 +28,20 @@ class Telegram {
             inline_keyboard: inline_keyboard
         }
     }
+
+    generateBusReturnText(services) {
+        let messageStr = '';
+
+        _.forEach(services, (bus) => {
+            let dateStr = bus.NextBus.EstimatedArrival.split('+');
+            const difference = Math.abs(new Date(dateStr[0]) - new Date());
+            const diffInMins = Math.round(((difference % 86400000) % 3600000) / 60000);
+
+            messageStr += `Bus ${bus.ServiceNo} :     ${diffInMins} mins\n`;
+        });
+
+        return messageStr;
+    }
 }
 
 module.exports = Telegram;

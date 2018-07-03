@@ -1,22 +1,17 @@
 const _ = require('lodash');
-const axios = require('axios');
 
-// API
-const API_URL = 'http://datamall2.mytransport.sg/ltaodataservice/CarParkAvailabilityv2';
-const AXIOS_HEADERS = {
-    headers: {
-        AccountKey: 'aku7DxAUSsiZYiHHTeAF6A==',
-        accept: 'application/json'
-    }
-};
+const Lta = require('./Lta');
 
 // Parking Data
 let PARKING_DATA = [];
 
-
-class Carparks {
+class Carparks extends Lta {
     constructor() {
-        this.updateData();
+        super();
+
+        this.API_URL = this.LTA_API_URL + this.CARPARK_API_EXT;
+
+        this.getData(this.API_URL, this.updateCallback, true);
     }
 
     search(term) {
@@ -41,18 +36,9 @@ class Carparks {
         return result;
     }
 
-    updateData() {
-        axios.get(API_URL, AXIOS_HEADERS)
-            .then(response => {
-                PARKING_DATA = response.data.value;
-            }
-        );
-
-        setTimeout(() => {
-            this.updateData();
-        }, 900000);
+    updateCallback(response) {
+        PARKING_DATA = response.data.value;
     }
-
 
 }
 

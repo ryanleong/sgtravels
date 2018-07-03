@@ -42,6 +42,10 @@ let parkingData = [
     }
 ]
 
+app.get('/', (req, res) => {
+    res.send('Welcome to SG Travels API.');
+});
+
 app.get('/parking', (req, res) => {
     axios.get(API_URL, AXIOS_HEADERS)
         .then(response => {

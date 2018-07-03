@@ -1,7 +1,7 @@
 {
   "name": "sgtravels",
   "version": "1.0.0",
-  "description": "A Telegram bot running on ExpressJS for Singapore bus timings.",
+  "description": "A simple telegram bot for SG public transport",
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

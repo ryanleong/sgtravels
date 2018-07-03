@@ -86,7 +86,7 @@ const handleMessages = (message) => {
 
     if (message.entities) {
         if (message.entities.type == 'bot_command') {
-            const term = messsage.substr(original.indexOf(" ") + 1);
+            const term = messsage.substr(messsage.indexOf(" ") + 1);
             logger.info('Search Term', { term: term });
 
             sendMessage(chat_id, `You searched for: ${term}`);
@@ -101,6 +101,9 @@ const handleMessages = (message) => {
     }
 
 }
+
+let k = '/carpark suntec';
+console.log(k.substr(k.indexOf(" ") + 1));
 
 // webhook for telegram
 app.post(webhookURL, (req, res) => {

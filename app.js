@@ -1,6 +1,7 @@
 const axios = require('axios');
 const express = require('express');
 const _ = require('lodash');
+const logger = require('heroku-logger');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -14,6 +15,7 @@ const AXIOS_HEADERS = {
 };
 
 const webhookURL = '/iZYiHHTeAFku7DxAUSsiZ';
+const TELEGRAM_BOT_URL = 'https://api.telegram.org/bot551711816:AAEju_7ufObPEdr8P0vvM4FCIWmD1YW-Smo';
 
 let parkingData = [
     {
@@ -47,12 +49,13 @@ let parkingData = [
 
 // webhook for telegram
 app.post(webhookURL, (req, res) => {
-    console.log(res);
-    // res.send('SG Travels Bot');
+    logger.info(res);
+    res.send('SG Travels Bot');
 });
 
 
 app.get('/', (req, res) => {
+    logger.info(res);
     res.send('Welcome to SG Travels API.');
 });
 

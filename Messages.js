@@ -20,7 +20,7 @@ class Messages {
 Welcome to the SG Travels Bot
 
 Commands:
-/bus <bus_stop_id> - Get bus arrival timings based on bus stop ID
+/busstop <bus_stop_id> - Get bus arrival timings based on bus stop ID
 /carpark <location> - Search for carpark at location
 /help - Brings up this menu
         `;
@@ -96,7 +96,7 @@ Commands:
                     this.commandCarpark(message);
                     break;
                 
-                case '/bus':
+                case '/busstop':
                     this.commandBus(message);
                     break;
                     

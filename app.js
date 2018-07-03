@@ -38,7 +38,7 @@ let parkingData = [
     {
         CarParkID: '2',
         Area: 'Marina',
-        Development: 'Marina Square',
+        Development: 'Suntec',
         Location: '1.29115 103.85728',
         AvailableLots: 1038,
         LotType: 'C',
@@ -57,19 +57,28 @@ let parkingData = [
 
 
 
-const sendMessage = (chat_id, message) => {
-    const msg = message;
-
-    axios.post(`${TELEGRAM_BOT_URL}/sendMessage`, {
-        chat_id: chat_id,
-        text: msg
-    })
+const sendMessage = (data) => {
+    axios.post(`${TELEGRAM_BOT_URL}/sendMessage`, data)
         .then((res) => {
             logger.info('Message sent', {
-                message: msg,
+                message: data.text,
             });            
         });
 };
+
+const getParkingIdByName = (term) => {
+    const searchLocation = term.toLowerCase();
+    
+    const result = _.filter(parkingData, (location) => {
+        const currentLocation = location.Development.toLowerCase();
+
+        if (_.includes(currentLocation, searchLocation)) {
+            return location;
+        }
+    });
+
+    return result;
+}
 
 const getParkingById = (id) => {
     const result = _.filter(parkingData, (location) => {
@@ -79,17 +88,37 @@ const getParkingById = (id) => {
     return result;
 }
 
+const generateInlineKeyboard = (options) => {
+    const inline_keyboard = _.map(options, (carpark) => {
+        return [{
+            text: carpark.Development,
+            callback_data: carpark.CarParkID
+        }]
+    });
+
+    return {
+        inline_keyboard: inline_keyboard
+    }
+}
+
 const handleMessages = (message) => {
     const chat_id = message.chat.id;
     const messsage = message.text;
 
 
     if (message.entities) {
-        if (message.entities.type == 'bot_command') {
+        if (message.entities[0].type == 'bot_command') {
             const term = messsage.substr(messsage.indexOf(" ") + 1);
             logger.info('Search Term', { term: term });
 
-            sendMessage(chat_id, `You searched for: ${term}`);
+            const carparkResultList = getParkingIdByName(term);
+            const keyboard = generateInlineKeyboard(carparkResultList);
+
+            sendMessage({
+                chat_id: chat_id,
+                text: 'Select one of the options.',
+                reply_markup: keyboard
+            });
         }
     }
     else {
@@ -97,13 +126,15 @@ const handleMessages = (message) => {
         const message_id = message.message_id;
         logger.info('message_id', { message_id: message_id });
     
-        sendMessage(chat_id, `Received your text: ${messsage}`);
+        // sendMessage(chat_id, `Received your text: ${messsage}`);
+        sendMessage({
+            chat_id: chat_id,
+            text: `Received your text: ${messsage}`
+        });
     }
 
 }
 
-let k = '/carpark suntec';
-console.log(k.substr(k.indexOf(" ") + 1));
 
 // webhook for telegram
 app.post(webhookURL, (req, res) => {
@@ -112,16 +143,7 @@ app.post(webhookURL, (req, res) => {
 
 
     if(req.body.message) {
-
         handleMessages(req.body.message);
-
-        // const chat_id = req.body.message.chat.id;
-        // const messsage = req.body.message.text;
-        // const message_id = req.body.message.message_id;
-    
-        // logger.info('message_id', { message_id: message_id });
-    
-        // sendMessage(chat_id, `Received your text: ${messsage}`);
     }
 
     else if(req.body.callback_query) {
@@ -131,7 +153,11 @@ app.post(webhookURL, (req, res) => {
         const carpark = getParkingById(1)[0];
         const carparkReply = `Carpark: ${carpark.Development}\nAvailable lots: ${carpark.AvailableLots}`;
 
-        sendMessage(chat_id, carparkReply);
+        // sendMessage(chat_id, carparkReply);
+        sendMessage({
+            chat_id: chat_id,
+            text: carparkReply
+        });
     }
 
 

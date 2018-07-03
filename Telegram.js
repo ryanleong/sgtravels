@@ -10,7 +10,7 @@ class Telegram {
         axios.post(`${TELEGRAM_BOT_URL}/sendMessage`, data)
             .then((res) => {
                 logger.info('Message sent', {
-                    message: Sent,
+                    message: 'Sent',
                 });            
             }
         );

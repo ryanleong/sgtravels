@@ -45,7 +45,6 @@ class Carparks {
         axios.get(API_URL, AXIOS_HEADERS)
             .then(response => {
                 PARKING_DATA = response.data.value;
-                console.log('updated');
             }
         );
 

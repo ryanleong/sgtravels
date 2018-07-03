@@ -3,6 +3,7 @@ const express = require('express');
 const _ = require('lodash');
 
 const app = express();
+const PORT = process.env.PORT;
 
 const API_URL = 'http://datamall2.mytransport.sg/ltaodataservice/CarParkAvailabilityv2';
 const AXIOS_HEADERS = {
@@ -84,5 +85,5 @@ app.get('/parking/id/:id', (req, res) => {
 });
 
 
-app.listen(3000, () => console.log('Example app listening on port 3000!'));
+app.listen(PORT, () => console.log('Listening on port 3000!'));
 

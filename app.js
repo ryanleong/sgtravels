@@ -12,52 +12,10 @@ const PORT = process.env.PORT || 3000;
 const webhookURL = '/iZYiHHTeAFku7DxAUSsiZ';
 const app = express();
 
+// Allow POST data
 app.use(bodyParser.json()); // support json encoded bodies
 app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
 
-
-// AXIOS
-global.API_URL = 'http://datamall2.mytransport.sg/ltaodataservice/CarParkAvailabilityv2';
-global.AXIOS_HEADERS = {
-    headers: {
-        AccountKey: 'aku7DxAUSsiZYiHHTeAF6A==',
-        accept: 'application/json'
-    }
-};
-
-// Telegram
-global.TELEGRAM_BOT_URL = 'https://api.telegram.org/bot551711816:AAEju_7ufObPEdr8P0vvM4FCIWmD1YW-Smo';
-
-// Parking data
-global.PARKING_DATA = [
-    {
-        CarParkID: '1',
-        Area: 'Marina',
-        Development: 'Suntec City',
-        Location: '1.29375 103.85718',
-        AvailableLots: 965,
-        LotType: 'C',
-        Agency: 'LTA'
-    },
-    {
-        CarParkID: '2',
-        Area: 'Marina',
-        Development: 'Marina Square',
-        Location: '1.29115 103.85728',
-        AvailableLots: 1038,
-        LotType: 'C',
-        Agency: 'LTA'
-    },
-    {
-        CarParkID: '3',
-        Area: 'Marina',
-        Development: 'Raffles City',
-        Location: '1.29382 103.85319',
-        AvailableLots: 293,
-        LotType: 'C',
-        Agency: 'LTA'
-    }
-]
 
 // webhook for telegram
 app.post(webhookURL, (req, res) => {
@@ -85,3 +43,35 @@ app.post(webhookURL, (req, res) => {
 
 
 app.listen(PORT, () => console.log(`Listening on port ${PORT}...`));
+
+
+
+
+// // test
+// const m = {
+//     "message_id": 84,
+//     "from": {
+//         "id": 333995996,
+//         "is_bot": false,
+//         "first_name": "Ryan",
+//         "last_name": "Leong",
+//         "username": "ryanleong",
+//         "language_code": "en-US"
+//     },
+//     "chat": {
+//         "id": 333995996,
+//         "first_name": "Ryan",
+//         "last_name": "Leong",
+//         "username": "ryanleong",
+//         "type": "private"
+//     },
+//     "date": 1530608485,
+//     "text": "/carpark suntec",
+//     "entities": [
+//         {
+//             "offset": 0,
+//             "length": 8,
+//             "type": "bot_command"
+//         }
+//     ]
+// };

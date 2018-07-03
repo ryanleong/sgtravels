@@ -43,35 +43,3 @@ app.post(webhookURL, (req, res) => {
 
 
 app.listen(PORT, () => console.log(`Listening on port ${PORT}...`));
-
-
-
-
-// // test
-// const m = {
-//     "message_id": 84,
-//     "from": {
-//         "id": 333995996,
-//         "is_bot": false,
-//         "first_name": "Ryan",
-//         "last_name": "Leong",
-//         "username": "ryanleong",
-//         "language_code": "en-US"
-//     },
-//     "chat": {
-//         "id": 333995996,
-//         "first_name": "Ryan",
-//         "last_name": "Leong",
-//         "username": "ryanleong",
-//         "type": "private"
-//     },
-//     "date": 1530608485,
-//     "text": "/carpark suntec",
-//     "entities": [
-//         {
-//             "offset": 0,
-//             "length": 8,
-//             "type": "bot_command"
-//         }
-//     ]
-// };

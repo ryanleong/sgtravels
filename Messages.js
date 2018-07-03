@@ -1,23 +1,15 @@
-const axios = require('axios');
 const logger = require('heroku-logger');
 
 const Carparks = require('./Carparks');
 const Telegram = require('./Telegram');
+
+const TELEGRAM_BOT_URL = 'https://api.telegram.org/bot551711816:AAEju_7ufObPEdr8P0vvM4FCIWmD1YW-Smo';
 
 class Messages {
 
     constructor() {
         this.carparkHandler = new Carparks();
         this.telegramHandler = new Telegram();
-    }
-
-    send(data) {
-        axios.post(`${TELEGRAM_BOT_URL}/sendMessage`, data)
-            .then((res) => {
-                logger.info('Message sent', {
-                    message: data.text,
-                });            
-            });
     }
 
     commandHelp(chat_id) {
@@ -30,7 +22,7 @@ Commands:
 /help - Brings up this menu
         `;
 
-        this.send({
+        telegramHandler.send({
             chat_id: chat_id,
             text: helpText
         });
@@ -51,7 +43,7 @@ Commands:
         const carparkResultList = this.carparkHandler.search(term);
         const keyboard = this.telegramHandler.generateInlineKeyboard(carparkResultList);
 
-        this.send({
+        telegramHandler.send({
             chat_id: chat_id,
             text: 'Select one of the options.',
             reply_markup: keyboard
@@ -86,7 +78,7 @@ Commands:
 
         // logger.info('message_id', { message_id: message_id });
     
-        // this.send({
+        // telegramHandler.send({
         //     chat_id: chat_id,
         //     text: `Received your text: ${message.text}`
         // });
@@ -99,7 +91,7 @@ Commands:
         const carpark = this.carparkHandler.getById(id)[0];
         const carparkReply = `Carpark: ${carpark.Development}\nAvailable lots: ${carpark.AvailableLots}`;
 
-        this.send({
+        telegramHandler.send({
             chat_id: chat_id,
             text: carparkReply
         });

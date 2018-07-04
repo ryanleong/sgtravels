@@ -11,7 +11,7 @@ class Carparks extends Lta {
 
         this.API_URL = this.LTA_API_URL + this.CARPARK_API_EXT;
 
-        this.getData(this.API_URL, this.updateCallback, true);
+        this.getData(this.API_URL, this.updateCallback, 900000);
     }
 
     search(term) {

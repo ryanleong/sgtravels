@@ -58,6 +58,50 @@ class Telegram {
 
         return messageStr;
     }
+
+    generateTranServiceAlerts(data) {
+        const status = data.Status;
+        const affectedSegments = data.AffectedSegments;
+        const messages = data.Message;
+        let returnMessage = 'There are currently not train faults';
+
+        // No Faults
+        if (status == 1) {
+              // Step 0: No faults
+            if (affectedSegments.length == 0) {
+                console.log("Step 0");
+            }
+            
+            // Step 5: Resolved faults
+            else if (!this.hasAffectedTrainStationSegments(affectedSegments)) {
+                console.log("Step 5");
+                returnMessage = 'All previous faults has been resolved.' + returnMessage;
+            }
+        }
+
+        // Has faults
+        else if (status == 2) {
+            
+            // Step 2 - 4: Display fault messages
+            if (messages.length > 0) {
+                returnMessage = '';
+
+                _.forEach(messages, (message, index) => {
+                    returnMessage += `${message.Content}\n\n`;
+                });
+            }
+        }
+
+        return returnMessage;
+    }
+
+    hasAffectedTrainStationSegments(segmentData) {
+        const affected = _.find(segmentData, (segment) => {
+            return segment.Stations != "";
+        })
+
+        return affected === undefined ? false: true;
+    }
 }
 
 module.exports = Telegram;

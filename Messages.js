@@ -2,16 +2,16 @@ const logger = require('heroku-logger');
 
 const Carparks = require('./Carparks');
 const Bus = require('./Bus');
+const Train = require('./Train');
 const Telegram = require('./Telegram');
-
-const TELEGRAM_BOT_URL = 'https://api.telegram.org/bot551711816:AAEju_7ufObPEdr8P0vvM4FCIWmD1YW-Smo';
 
 class Messages {
 
     constructor() {
         this.carparkHandler = new Carparks();
-        this.telegramHandler = new Telegram();
         this.busHandler = new Bus();
+        this.trainHandler = new Train();
+        this.telegramHandler = new Telegram();
     }
 
     commandHelp(chat_id) {
@@ -69,10 +69,10 @@ Commands:
 
                 const messageStr = this.telegramHandler.generateBusReturnText(data.Services);
 
-                // this.telegramHandler.send({
-                //     chat_id: chat_id,
-                //     text: messageStr,
-                // });
+                this.telegramHandler.send({
+                    chat_id: chat_id,
+                    text: messageStr,
+                });
             }
             else {
                 this.telegramHandler.send({
@@ -80,6 +80,19 @@ Commands:
                     text: 'There are no buses running.',
                 });
             }
+        });
+    }
+
+    commandTrain(message) {
+        const chat_id = message.chat.id;
+
+        this.trainHandler.getServiceAlerts((data) => {
+            const alert = this.telegramHandler.generateTranServiceAlerts(data.value);
+
+            this.telegramHandler.send({
+                chat_id: chat_id,
+                text: alert,
+            });
         });
     }
 
@@ -98,6 +111,10 @@ Commands:
                 
                 case '/busstop':
                     this.commandBus(message);
+                    break;
+
+                case '/train':
+                    this.commandTrain(message);
                     break;
                     
                 default:

@@ -33,8 +33,24 @@ class Telegram {
         let messageStr = '';
 
         _.forEach(services, (bus) => {
+            const currentTime = new Date();
+            
+            // Arrival time as string
             let dateStr = bus.NextBus.EstimatedArrival.split('+');
-            const difference = Math.abs(new Date(dateStr[0]) - new Date());
+
+            // Get time left
+            let difference = new Date(dateStr[0]) - currentTime;
+
+            // Check if time has passed
+            if (difference < 0) {
+                // Get next next bus
+                dateStr = bus.NextBus2.EstimatedArrival.split('+');
+
+                // Get time left
+                difference = new Date(dateStr[0]) - currentTime;
+            }
+
+            // Time left in minutes
             const diffInMins = Math.round(((difference % 86400000) % 3600000) / 60000);
 
             messageStr += `Bus ${bus.ServiceNo} :     ${diffInMins} mins\n`;

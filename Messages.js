@@ -20,9 +20,9 @@ class Messages {
 Welcome to the SG Travels Bot
 
 Commands:
-/busstop <bus_stop_id> - Get bus arrival timings based on bus stop ID
+/busstop <bus_stop_id> - Get arrival timings based on bus stop ID
 /carpark <location> - Search for carpark at location
-/help - Brings up this menu
+/help - Display help menu
         `;
 
         this.telegramHandler.send({
@@ -69,10 +69,10 @@ Commands:
 
                 const messageStr = this.telegramHandler.generateBusReturnText(data.Services);
 
-                this.telegramHandler.send({
-                    chat_id: chat_id,
-                    text: messageStr,
-                });
+                // this.telegramHandler.send({
+                //     chat_id: chat_id,
+                //     text: messageStr,
+                // });
             }
             else {
                 this.telegramHandler.send({

@@ -24,8 +24,8 @@ class Messages {
 Welcome to the SG Travels Bot
 
 Commands:
-/busstop <bus_stop_id> - Get arrival timings based on bus stop ID
-/carpark <location> - Search for carpark at location
+/busstop - Get arrival timings based on bus stop ID
+/carpark - Search for carpark at location
 /train - Check if there are train faults
 /help - Display help menu
         `;

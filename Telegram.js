@@ -64,7 +64,7 @@ class Telegram {
         const status = data.Status;
         const affectedSegments = data.AffectedSegments;
         const messages = data.Message;
-        let returnMessage = 'There are currently not train faults';
+        let returnMessage = 'There are currently no train faults';
 
         // No Faults
         if (status == 1) {

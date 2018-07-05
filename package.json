@@ -4,7 +4,9 @@
   "description": "A simple telegram bot for SG public transport",
   "main": "app.js",
   "scripts": {
-    "start": "node app.js",
+    "dev": "node app.js",
+    "start": "NODE_ENV=production node app.js",
+    "start-win": "SET NODE_ENV=production && node app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Ryan Leong",
@@ -12,6 +14,8 @@
   "dependencies": {
     "axios": "^0.18.0",
     "body-parser": "^1.18.3",
+    "config": "^1.30.0",
+    "dotenv": "^6.0.0",
     "express": "^4.16.3",
     "heroku-logger": "^0.3.1",
     "lodash": "^4.17.10"

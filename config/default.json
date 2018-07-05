@@ -1,0 +1,12 @@
+{
+    "telegram": {
+        "TELEGRAM_WEBHOOK_EXT": "/iZYiHHTeAFku7DxAUSsiZ",
+        "TELEGRAM_API_URL": "https://api.telegram.org/bot"
+    },
+    "lta": {
+        "LTA_API_URL": "http://datamall2.mytransport.sg/ltaodataservice",
+        "LTA_CARPARK_API_EXT": "/CarParkAvailabilityv2",
+        "LTA_BUS_API_EXT": "/BusArrivalv2",
+        "LTA_TRAIN_API_EXT": "/TrainServiceAlerts"
+    }
+}

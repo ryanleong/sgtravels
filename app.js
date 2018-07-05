@@ -1,4 +1,6 @@
-const axios = require('axios');
+require('dotenv').config();
+
+const config = require('config');
 const express = require('express');
 const bodyParser = require('body-parser');
 const _ = require('lodash');
@@ -9,7 +11,7 @@ const messageHandler = new Messages();
 
 // ExpressJS
 const PORT = process.env.PORT || 3000;
-const webhookURL = '/iZYiHHTeAFku7DxAUSsiZ';
+const webhookURL = config.get('telegram.TELEGRAM_WEBHOOK_EXT');
 const app = express();
 
 // Allow POST data
@@ -40,6 +42,5 @@ app.post(webhookURL, (req, res) => {
     
     res.send('SG Travels Bot');    
 });
-
 
 app.listen(PORT, () => console.log(`Listening on port ${PORT}...`));

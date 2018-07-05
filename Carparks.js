@@ -1,4 +1,5 @@
 const _ = require('lodash');
+const config = require('config');
 
 const Lta = require('./Lta');
 
@@ -9,7 +10,7 @@ class Carparks extends Lta {
     constructor() {
         super();
 
-        this.API_URL = this.LTA_API_URL + this.CARPARK_API_EXT;
+        this.API_URL = this.LTA_API_URL + config.get('lta.LTA_CARPARK_API_EXT');
 
         this.getData(this.API_URL, this.updateCallback, 900000);
     }

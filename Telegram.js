@@ -1,8 +1,9 @@
 const logger = require('heroku-logger');
 const _ = require('lodash');
 const axios = require('axios');
+const config = require('config');
 
-const TELEGRAM_BOT_URL = 'https://api.telegram.org/bot551711816:AAEju_7ufObPEdr8P0vvM4FCIWmD1YW-Smo';
+const TELEGRAM_BOT_URL = `${config.get('telegram.TELEGRAM_API_URL')}${process.env.TELEGRAM_API_KEY}`;
 
 class Telegram {
 

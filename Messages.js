@@ -62,15 +62,21 @@ Commands:
         });
     }
 
-    commandBus(message) {
+    commandBusstop(message) {
         const chat_id = message.chat.id;
-        const stopId = message.text.substr(message.text.indexOf(" ") + 1);
 
-        // Check if search has no term
-        if (message.text.split(" ").length == 1) {
-            this.commandHelp(chat_id);
-            return;
-        }
+        // Set state
+        this.userHandler.updateUser(chat_id, 'BUS_REQUESTING_TERM');
+
+        this.telegramHandler.send({
+            chat_id: chat_id,
+            text: 'Please enter a bus stop ID.',
+        });
+    }
+
+    handleBusStopSearchResponse(message) {
+        const chat_id = message.chat.id;
+        const stopId = message.text;
 
         this.busHandler.getArrivalTimings(stopId, (data) => {
 
@@ -90,6 +96,9 @@ Commands:
                 });
             }
         });
+
+        // Reset user state to defult
+        this.userHandler.updateUser(chat_id);
     }
 
     commandTrain(message) {
@@ -119,7 +128,7 @@ Commands:
                     break;
                 
                 case '/busstop':
-                    this.commandBus(message);
+                    this.commandBusstop(message);
                     break;
 
                 case '/train':
@@ -133,34 +142,13 @@ Commands:
         }
     }
 
-    handleMessage(req) {
-
-        if(req.body.message) {
-            // If Bot Command
-            if (req.body.message.entities) {
-                this.handleBotCommand(req.body.message);
-            }
-    
-            // If standard message
-            else {
-                this.commandHelp(req.body.message.chat.id);
-            }
-        }
-    
-        // If callback query from inline keyboard
-        else if(req.body.callback_query) {
-            this.handleCallbackQuery(req.body.callback_query);
-        }
-
-    }
-
     handleCallbackQuery(callback) {
         const chat_id = callback.message.chat.id;
         const callbackData = callback.data.split('-');
-        const id = callbackData[1];
 
         // Carpark callback
         if (callbackData[0] == 'carparkReq') {
+            const id = callbackData[1];
             const carpark = this.carparkHandler.getById(id)[0];
             const carparkReply = `Carpark: ${carpark.Development}\nAvailable lots: ${carpark.AvailableLots}`;
     
@@ -203,6 +191,10 @@ Commands:
             switch (currentUser.getState()) {
                 case 'CARPARK_REQUESTING_TERM':
                     this.handleCarparkSearch(req.body.message);
+                    break;
+            
+                case 'BUS_REQUESTING_TERM':
+                    this.handleBusStopSearchResponse(req.body.message);
                     break;
             
                 default:

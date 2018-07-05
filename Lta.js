@@ -24,7 +24,7 @@ class Lta {
 
         if (recurringInterval > 0 ) {
             setTimeout(() => {
-                this.updateData(url, callback, true);
+                this.getData(url, callback, true);
             }, recurringInterval);
         }
     }

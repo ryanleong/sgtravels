@@ -6,6 +6,7 @@ class Users {
 
     constructor() {
         this.userList = {};
+        this.cleanUpUserList();
     }
 
     createUser(id) {
@@ -42,6 +43,10 @@ class Users {
                 delete this.userList[user.getId()];
             }
         });
+
+        setTimeout(() => {
+            this.cleanUpUserList();
+        }, 900000);
 
     }
 }

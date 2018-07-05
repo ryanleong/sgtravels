@@ -5,6 +5,8 @@ const Bus = require('./Bus');
 const Train = require('./Train');
 const Telegram = require('./Telegram');
 
+const Users = require('./Users');
+
 class Messages {
 
     constructor() {
@@ -12,6 +14,8 @@ class Messages {
         this.busHandler = new Bus();
         this.trainHandler = new Train();
         this.telegramHandler = new Telegram();
+
+        this.userHandler = new Users();
     }
 
     commandHelp(chat_id) {
@@ -101,6 +105,9 @@ Commands:
         const messageText = message.text;
 
         if (message.entities[0].type == 'bot_command') {
+
+            // Create/Update user to keep track of state
+            this.userHandler.updateUser(message.chat.id);
 
             const command = messageText.split(" ")[0];
 

@@ -23,22 +23,7 @@ app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
 app.post(webhookURL, (req, res) => {
     logger.info('Body', req.body);
 
-    if(req.body.message) {
-        // If Bot Command
-        if (req.body.message.entities) {
-            messageHandler.handleBotCommand(req.body.message);
-        }
-
-        // If standard message
-        else {
-            messageHandler.handleMessage(req.body.message);
-        }
-    }
-
-    // If callback query from inline keyboard
-    else if(req.body.callback_query) {
-        messageHandler.handleCallbackQuery(req.body.callback_query);
-    }
+    messageHandler.onReceive(req);
     
     res.send('SG Travels Bot');    
 });

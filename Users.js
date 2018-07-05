@@ -23,9 +23,6 @@ class Users {
         if (id in this.userList) {
             // Update lastAccessed
             this.userList[id].setLastAccessed();
-
-            // Update state
-            this.userList[id].setState(state);
         }
 
         // If not in userList object
@@ -34,7 +31,8 @@ class Users {
             this.createUser(id);
         }
 
-        console.log(this.userList);
+        // Update state
+        this.userList[id].setState(state);
     }
 
     cleanUpUserList() {

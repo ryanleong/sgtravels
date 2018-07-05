@@ -38,15 +38,19 @@ Commands:
 
     commandCarpark(message) {
         const chat_id = message.chat.id;
-        const term = message.text.substr(message.text.indexOf(" ") + 1);
 
-        // Check if search has no term
-        if (message.text.split(" ").length == 1) {
-            this.commandHelp(chat_id);
-            return;
-        }
+        // Set state
+        this.userHandler.updateUser(chat_id, 'CARPARK_REQUESTING_TERM');
 
-        logger.info('Search Term', { term: term });
+        this.telegramHandler.send({
+            chat_id: chat_id,
+            text: 'Please enter a location for search.',
+        });
+    }
+
+    handleCarparkSearch(message) {
+        const chat_id = message.chat.id;
+        const term = message.text;
 
         const carparkResultList = this.carparkHandler.search(term);
         const keyboard = this.telegramHandler.generateInlineKeyboard(carparkResultList);
@@ -106,9 +110,6 @@ Commands:
 
         if (message.entities[0].type == 'bot_command') {
 
-            // Create/Update user to keep track of state
-            this.userHandler.updateUser(message.chat.id);
-
             const command = messageText.split(" ")[0];
 
             switch(command) {
@@ -132,31 +133,84 @@ Commands:
         }
     }
 
-    handleMessage(message) {
-        this.commandHelp(message.chat.id);
+    handleMessage(req) {
 
-        // const chat_id = message.chat.id;
-        // const message_id = message.message_id;
-
-        // logger.info('message_id', { message_id: message_id });
+        if(req.body.message) {
+            // If Bot Command
+            if (req.body.message.entities) {
+                this.handleBotCommand(req.body.message);
+            }
     
-        // this.telegramHandler.send({
-        //     chat_id: chat_id,
-        //     text: `Received your text: ${message.text}`
-        // });
+            // If standard message
+            else {
+                this.commandHelp(req.body.message.chat.id);
+            }
+        }
+    
+        // If callback query from inline keyboard
+        else if(req.body.callback_query) {
+            this.handleCallbackQuery(req.body.callback_query);
+        }
+
     }
 
     handleCallbackQuery(callback) {
         const chat_id = callback.message.chat.id;
-        const id = callback.data;
+        const callbackData = callback.data.split('-');
+        const id = callbackData[1];
 
-        const carpark = this.carparkHandler.getById(id)[0];
-        const carparkReply = `Carpark: ${carpark.Development}\nAvailable lots: ${carpark.AvailableLots}`;
+        // Carpark callback
+        if (callbackData[0] == 'carparkReq') {
+            const carpark = this.carparkHandler.getById(id)[0];
+            const carparkReply = `Carpark: ${carpark.Development}\nAvailable lots: ${carpark.AvailableLots}`;
+    
+            this.telegramHandler.send({
+                chat_id: chat_id,
+                text: carparkReply
+            });
 
-        this.telegramHandler.send({
-            chat_id: chat_id,
-            text: carparkReply
-        });
+            // Reset user state to defult
+            this.userHandler.updateUser(chat_id);
+        }
+
+    }
+
+    onReceive(req) {
+
+        // If bot command
+        if (req.body.message && req.body.message.entities) {
+
+            // Reset user state to defult when new command
+            this.userHandler.updateUser(req.body.message.chat.id);
+
+            this.handleBotCommand(req.body.message);
+        }
+
+        // If callback query from inline keyboard
+        else if(req.body.callback_query) {
+            this.handleCallbackQuery(req.body.callback_query);
+        }
+
+        // If standard message
+        else {
+
+            const currentUser = this.userHandler.getUser(req.body.message.chat.id);
+            if (currentUser === undefined) {
+                // Create/Update user to keep track of state
+                this.userHandler.updateUser(req.body.message.chat.id);
+            }
+
+            switch (currentUser.getState()) {
+                case 'CARPARK_REQUESTING_TERM':
+                    this.handleCarparkSearch(req.body.message);
+                    break;
+            
+                default:
+                    this.commandHelp(req.body.message.chat.id);
+                    break;
+            }
+        }
+
     }
 }
 

@@ -92,6 +92,19 @@ Commands:
         const chat_id = message.chat.id;
         const stopId = message.text;
 
+        // Check if stop id is numeric
+        if (!(/^\d+$/.test(stopId)))  {
+            // Set state
+            this.userHandler.updateUser(chat_id, 'BUS_REQUESTING_TERM');
+
+            this.telegramHandler.send({
+                chat_id: chat_id,
+                text: 'Bus stop id invalid.\nPlease enter another bus stop id.',
+            });
+
+            return;
+        }
+
         this.busHandler.getArrivalTimings(stopId, (data) => {
 
             if (data.Services.length > 0) {

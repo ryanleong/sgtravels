@@ -20,16 +20,6 @@ class Messages {
 
     commandHelp(chat_id) {
 
-//         const helpText = `
-// Welcome to the SG Travels Bot
-
-// Commands:
-// /busstop - Get arrival timings based on bus stop ID
-// /carpark - Search for carpark at location
-// /train - Check if there are train faults
-// /help - Display help menu
-//         `;
-
         const keyboard = this.telegramHandler.generateMainMenuInlineKeyboard();
 
         this.telegramHandler.send({
@@ -148,19 +138,8 @@ class Messages {
             const command = messageText.split(" ")[0];
 
             switch(command) {
-                
-                case '/carpark':
-                    this.commandCarpark(message);
-                    break;
-                
-                case '/busstop':
-                    this.commandBusstop(message);
-                    break;
-
-                case '/train':
-                    this.commandTrain(message);
-                    break;
-                    
+                case '/start':
+                case '/help':
                 default:
                     this.commandHelp(message.chat.id);
                     break;

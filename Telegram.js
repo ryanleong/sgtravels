@@ -17,7 +17,34 @@ class Telegram {
         );
     }
 
-    generateInlineKeyboard(options) {
+    generateMainMenuInlineKeyboard() {
+        const callbackSuffix = 'mainMenuReq';
+
+        const inline_keyboard = [
+            [
+                {
+                    text: 'Bus Arrival Timing',
+                    callback_data: `${callbackSuffix}-1`
+                },
+                {
+                    text: 'Parking Availability',
+                    callback_data: `${callbackSuffix}-2`
+                }
+            ],
+            [
+                {
+                    text: 'Train Faults',
+                    callback_data: `${callbackSuffix}-3`
+                }
+            ]
+        ]
+    
+        return {
+            inline_keyboard: inline_keyboard
+        }
+    }
+
+    generateCarparkInlineKeyboard(options) {
         const inline_keyboard = _.map(options, (carpark) => {
             return [{
                 text: carpark.Development,

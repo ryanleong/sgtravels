@@ -20,20 +20,24 @@ class Messages {
 
     commandHelp(chat_id) {
 
-        const helpText = `
-Welcome to the SG Travels Bot
+//         const helpText = `
+// Welcome to the SG Travels Bot
 
-Commands:
-/busstop - Get arrival timings based on bus stop ID
-/carpark - Search for carpark at location
-/train - Check if there are train faults
-/help - Display help menu
-        `;
+// Commands:
+// /busstop - Get arrival timings based on bus stop ID
+// /carpark - Search for carpark at location
+// /train - Check if there are train faults
+// /help - Display help menu
+//         `;
+
+        const keyboard = this.telegramHandler.generateMainMenuInlineKeyboard();
 
         this.telegramHandler.send({
             chat_id: chat_id,
-            text: helpText
+            text: 'Select a service.',
+            reply_markup: keyboard
         });
+
     }
 
     commandCarpark(message) {
@@ -67,7 +71,7 @@ Commands:
             return;
         }
 
-        const keyboard = this.telegramHandler.generateInlineKeyboard(carparkResultList);
+        const keyboard = this.telegramHandler.generateCarparkInlineKeyboard(carparkResultList);
 
         this.telegramHandler.send({
             chat_id: chat_id,
@@ -173,8 +177,27 @@ Commands:
         const chat_id = callback.message.chat.id;
         const callbackData = callback.data.split('-');
 
+        // Main menu callback
+        if(callbackData[0] == 'mainMenuReq') {
+            const id = callbackData[1];
+
+            switch(id) {
+                case 1:
+                    this.commandBusstop(message);
+                    break;
+
+                case 2:
+                    this.commandCarpark(message);
+                    break;
+    
+                case 3:
+                    this.commandTrain(message);
+                    break;
+            }
+        }
+
         // Carpark callback
-        if (callbackData[0] == 'carparkReq') {
+        else if (callbackData[0] == 'carparkReq') {
             const id = callbackData[1];
             const carpark = this.carparkHandler.getById(id)[0];
             const carparkReply = `Carpark: ${carpark.Development}\nAvailable lots: ${carpark.AvailableLots}`;

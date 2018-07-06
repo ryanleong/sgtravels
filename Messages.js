@@ -40,9 +40,7 @@ class Messages {
 
     }
 
-    commandCarpark(message) {
-        const chat_id = message.chat.id;
-
+    commandCarpark(chat_id) {
         // Set state
         this.userHandler.updateUser(chat_id, 'CARPARK_REQUESTING_TERM');
 
@@ -80,8 +78,7 @@ class Messages {
         });
     }
 
-    commandBusstop(message) {
-        const chat_id = message.chat.id;
+    commandBusstop(chat_id) {
 
         // Set state
         this.userHandler.updateUser(chat_id, 'BUS_REQUESTING_TERM');
@@ -132,9 +129,7 @@ class Messages {
         this.userHandler.updateUser(chat_id);
     }
 
-    commandTrain(message) {
-        const chat_id = message.chat.id;
-
+    commandTrain(chat_id) {
         this.trainHandler.getServiceAlerts((data) => {
             const alert = this.telegramHandler.generateTranServiceAlerts(data.value);
 
@@ -182,16 +177,16 @@ class Messages {
             const id = callbackData[1];
 
             switch(id) {
-                case 1:
-                    this.commandBusstop(message);
+                case '1':
+                    this.commandBusstop(chat_id);
                     break;
 
-                case 2:
-                    this.commandCarpark(message);
+                case '2':
+                    this.commandCarpark(chat_id);
                     break;
     
-                case 3:
-                    this.commandTrain(message);
+                case '3':
+                    this.commandTrain(chat_id);
                     break;
             }
         }

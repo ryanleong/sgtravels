@@ -53,6 +53,20 @@ Commands:
         const term = message.text;
 
         const carparkResultList = this.carparkHandler.search(term);
+
+        // If no results
+        if (carparkResultList.length < 1) {
+            // Set state
+            this.userHandler.updateUser(chat_id, 'CARPARK_REQUESTING_TERM');
+
+            this.telegramHandler.send({
+                chat_id: chat_id,
+                text: 'There are no carpark locations with this name.\nPlease enter another location.',
+            });
+
+            return;
+        }
+
         const keyboard = this.telegramHandler.generateInlineKeyboard(carparkResultList);
 
         this.telegramHandler.send({

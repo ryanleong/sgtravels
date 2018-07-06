@@ -1,4 +1,3 @@
-const logger = require('heroku-logger');
 
 const Carparks = require('./Carparks');
 const Bus = require('./Bus');

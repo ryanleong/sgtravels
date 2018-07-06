@@ -1,4 +1,3 @@
-const logger = require('heroku-logger');
 const _ = require('lodash');
 const axios = require('axios');
 const config = require('config');
@@ -9,10 +8,7 @@ class Telegram {
 
     send(data) {
         axios.post(`${TELEGRAM_BOT_URL}/sendMessage`, data)
-            .then((res) => {
-                logger.info('Message sent', {
-                    message: 'Sent',
-                });            
+            .then((res) => {      
             }
         );
     }

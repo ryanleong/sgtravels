@@ -94,7 +94,7 @@ Commands:
 
         this.busHandler.getArrivalTimings(stopId, (data) => {
 
-            if (data.Services) {
+            if (data.Services.length > 0) {
 
                 const messageStr = this.telegramHandler.generateBusReturnText(data.Services);
 

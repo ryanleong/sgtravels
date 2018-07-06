@@ -12,7 +12,6 @@ class Bus extends Lta {
         const url = `${this.API_URL}?BusStopCode=${stopId}`;
 
         this.getData(url, (response) => {
-            // console.log(response.data);
             messageHandler(response.data);
         });
     }

@@ -174,10 +174,14 @@ class Messages {
             const id = callbackData[1];
             const carpark = this.carparkHandler.getById(id)[0];
             const carparkReply = `Carpark: ${carpark.Development}\nAvailable lots: ${carpark.AvailableLots}`;
-    
+
             this.telegramHandler.send({
                 chat_id: chat_id,
                 text: carparkReply
+            });
+
+            this.telegramHandler.sendAnswerCallbackQuery({
+                callback_query_id: callback.data
             });
 
             // Reset user state to defult

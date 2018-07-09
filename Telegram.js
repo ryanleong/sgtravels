@@ -13,6 +13,13 @@ class Telegram {
         );
     }
 
+    sendAnswerCallbackQuery(data) {
+        axios.post(`${TELEGRAM_BOT_URL}/answerCallbackQuery`, data)
+            .then((res) => {      
+            }
+        );
+    }
+
     generateMainMenuInlineKeyboard() {
         const callbackSuffix = 'mainMenuReq';
 

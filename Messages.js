@@ -150,6 +150,11 @@ class Messages {
         const chat_id = callback.message.chat.id;
         const callbackData = callback.data.split('-');
 
+        console.log(callback.id);
+        this.telegramHandler.sendAnswerCallbackQuery({
+            callback_query_id: callback.id
+        });
+
         // Main menu callback
         if(callbackData[0] == 'mainMenuReq') {
             const id = callbackData[1];
@@ -178,10 +183,6 @@ class Messages {
             this.telegramHandler.send({
                 chat_id: chat_id,
                 text: carparkReply
-            });
-
-            this.telegramHandler.sendAnswerCallbackQuery({
-                callback_query_id: callback.data
             });
 
             // Reset user state to defult

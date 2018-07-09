@@ -9,15 +9,18 @@ class Telegram {
     send(data) {
         axios.post(`${TELEGRAM_BOT_URL}/sendMessage`, data)
             .then((res) => {      
-            }
-        );
+            })
+            .catch(error => {
+            });
     }
 
     sendAnswerCallbackQuery(data) {
         axios.post(`${TELEGRAM_BOT_URL}/answerCallbackQuery`, data)
             .then((res) => {      
-            }
-        );
+            })
+            .catch(error => {
+                console.log(error);
+            });
     }
 
     generateMainMenuInlineKeyboard() {

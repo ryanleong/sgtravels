@@ -19,7 +19,6 @@ class Telegram {
             .then((res) => {      
             })
             .catch(error => {
-                console.log(error);
             });
     }
 

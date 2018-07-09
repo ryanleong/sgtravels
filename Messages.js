@@ -150,7 +150,7 @@ class Messages {
         const chat_id = callback.message.chat.id;
         const callbackData = callback.data.split('-');
 
-        console.log(callback.id);
+        // Respond to show that we received the callback query
         this.telegramHandler.sendAnswerCallbackQuery({
             callback_query_id: callback.id
         });
